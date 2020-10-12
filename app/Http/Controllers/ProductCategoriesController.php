@@ -2,83 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductCategory;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class ProductCategoriesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function category()
     {
-        //
+        $product_category = ProductCategory::all()->toArray();
+        $sub_category = SubCategory::all()->toArray();
+        
+        return response()->json(['category' => $product_category, 'sub_category' => $sub_category]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    protected static $value;
+    public function new_product_category(Request $request)
     {
-        //
+        $this->validate($request,[
+            'catergory' => ['required', 'string']
+        ]);
+
+        $category = ProductCategory::create([
+            'catergory' => $request->input('catergory')
+        ]);
+        return self::$value = $category->id;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function new_product_sub_category(Request $request)
     {
-        //
+        $this->validate($request, [
+            'cat_id' => ['required', 'string'],
+            'su_category' => ['required', 'string']
+        ]);
+
+        return SubCategory::create([
+            'cat_id' => self::$value,
+            'su_category' => $request->input('catergory')
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+
+    public function Single_category($id)
     {
-        //
+        $product_category = ProductCategory::findOrFail($id);
+        $sub_category = SubCategory::findOrFail($id);
+
+        return response()->json(['category' => $product_category, 'sub_category' => $sub_category]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

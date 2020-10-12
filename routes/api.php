@@ -40,6 +40,7 @@ Route::put('buyer/{buyer}', 'App\Http\Controllers\API\BuyerAuthController@update
 Route::post('buyer/{buyer}/activate', 'App\Http\Controllers\API\BuyerAuthController@activate');
 Route::post('buyer/{buyer}/deactivate', 'App\Http\Controllers\API\BuyerAuthController@deactivate');
 Route::post('buyer/register', 'App\Http\Controllers\API\BuyerAuthController@register');
+
    
 Route::middleware('auth:api')->group( function () {
     // Route::resource('product', 'API\ProductController');
@@ -51,3 +52,10 @@ Route::apiResource('product','App\Http\Controllers\ProductController');
 Route::prefix('product')->group(function(){
     Route::apiResource('/{product}/reviews','App\Http\Controllers\ReviewsController');
 });
+
+
+//product category and sub category
+Route::post('merchant/c', 'App\Http\Controllers\API\ProductCategoriesController@new_product_category');
+Route::post('merchant/sc', 'App\Http\Controllers\API\ProductCategoriesController@new_product_sub_category');
+Route::get('merchant/c/', 'App\Http\Controllers\API\ProductCategoriesController@category');
+Route::get('merchant/c/{id}', 'App\Http\Controllers\API\ProductCategoriesController@Single_category');
