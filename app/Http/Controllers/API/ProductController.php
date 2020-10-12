@@ -7,6 +7,7 @@ use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Http\Resources\Product as ProductResource;
 use App\Http\Controllers\API\BaseController as BaseController;
+use Illuminate\Support\Facades\Storage;
    
 class ProductController extends BaseController
 {

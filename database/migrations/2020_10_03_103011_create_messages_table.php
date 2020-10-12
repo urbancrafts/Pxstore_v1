@@ -18,7 +18,7 @@ class CreateMessagesTable extends Migration
             $table->string('from_id');
             $table->string('to_id');
             $table->integer('reply_id')->nullable();
-            $table->string('support_ticket')->nullable();
+            $table->text('support_ticket')->nullable();
             $table->longtext('content')->nullable();
             $table->boolean('read')->default('0');
             $table->timestamps();

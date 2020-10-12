@@ -35,6 +35,10 @@ class CreateMerchantsTable extends Migration
             $table->string('logo')->nullable();
             $table->integer('merch_score')->nullable();
             $table->integer('returnCount')->nullable(); //Order Return Count
+            $table->string('comm_type')->default('normal');
+            $table->string('comm_duration')->nullable();
+            $table->string('comm_amount')->nullable();
+            $table->string('comm_curr')->nullable();
             $table->boolean('status')->default('0'); //merchant active status
             $table->boolean('deleted')->default('0'); //deleted status
             $table->timestamps();

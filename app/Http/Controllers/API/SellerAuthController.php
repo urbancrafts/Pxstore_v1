@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Merchant;
 use Validator;
    
 class SellerAuthController extends BaseController
@@ -16,12 +18,12 @@ class SellerAuthController extends BaseController
     }
     public function index()
     {
-        $sellers = User::all()->where('role', 2);
+        $sellers = User::all()->where('role', 3);
         if($sellers->count() > 0){
             return $this->sendResponse($sellers, 'Retrieved successfully.');
         }
         $sellers = 'null';
-        return $this->sendResponse($sellers, 'No registered seller yet.');
+        return $this->sendResponse($sellers, 'No registered merchant yet.');
     }
 
     /**
@@ -29,15 +31,23 @@ class SellerAuthController extends BaseController
     *
     * @return \Illuminate\Http\Response
     */
-    public function register(Request $request)
+    public function createStore(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required',
-            'fname' => 'required',
-            'lname' => 'required',
+            'user_id' => 'required',
+            'marchant_name' => 'required',
+            'store_category' => 'required',
+            'office_tel' => 'required',
+            'mobile_phone' => 'nullable',
             'email' => 'required|email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
+            'office_address' => 'required',
+            'zip_code' => 'required',
+            'county' => 'required',
+            'state' => 'required',
+            'country' => 'required',
+            'country_code' => 'required',
+            'curr' => 'required',
+            'detail' => 'nullable',
         ]);
    
         if($validator->fails()){
@@ -45,17 +55,27 @@ class SellerAuthController extends BaseController
         }
         
         $input = $request->all();
-        $input['role'] = 2; //Seller role identification
-        $input['status'] = 1; //set user status to true on success
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
+        $input['use_id'] = $_SESSION['user_id']; //get session user_id
+        $merchant = Merchant::create($input);
         
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['username'] =  $user->username;
-        $success['role'] =  $user->role;
-        $success['username'] =  $user->email;
-   
-        return $this->sendResponse($success, 'User register successfully.');
+        $success['token'] =  $merchant->createToken('MyApp')->accessToken;
+        $success['store_id'] =  $merchant->id;
+        $success['user_id'] =  $merchant->user_id;
+        $success['merch_name'] =  $merchant->merch_name;
+        $success['category'] =  $merchant->store_category;
+        $success['office_tel'] =  $merchant->office_tel;
+        $success['mobile_number'] =  $merchant->mobile_number;
+        $success['email'] =  $merchant->email;
+        $success['office_address'] =  $merchant->office_address;
+        $success['county'] =  $merchant->county;
+        $success['state'] =  $merchant->state;
+        $success['country'] =  $merchant->country;
+        $success['curr'] =  $merchant->curr;
+        
+        Storage::makeDirectory('/userassets/' . $merchant->user_id .'/store/'. $merchant->id);
+    
+
+        return $this->sendResponse($success, $merchant->merch_name.' page created successfully.');
     }
    
     /**

@@ -23,12 +23,12 @@ Route::post('admin/login', 'App\Http\Controllers\API\RegisterController@login');
 Route::post('admin/{admin}/logout', 'App\Http\Controllers\API\RegisterController@logout');
 
 
-Route::get('sellers', 'App\Http\Controllers\API\SellerAuthController@index');
-Route::get('seller/{seller}', 'App\Http\Controllers\API\SellerAuthController@show');
-Route::post('seller/{seller}/activate', 'App\Http\Controllers\API\SellerAuthController@activate');
-Route::post('seller/{seller}/deactivate', 'App\Http\Controllers\API\SellerAuthController@deactivate');
-Route::put('seller/{seller}', 'App\Http\Controllers\API\SellerAuthController@update');
-Route::post('seller/register', 'App\Http\Controllers\API\SellerAuthController@register');
+Route::get('merchants', 'App\Http\Controllers\API\SellerAuthController@index');
+Route::get('merchants/{merchant}', 'App\Http\Controllers\API\SellerAuthController@show');
+Route::post('merchants/{merchant}/activate', 'App\Http\Controllers\API\SellerAuthController@activate');
+Route::post('merchants/{merchant}/deactivate', 'App\Http\Controllers\API\SellerAuthController@deactivate');
+Route::put('merchants/{merchant}', 'App\Http\Controllers\API\SellerAuthController@update');
+Route::post('merchants/create', 'App\Http\Controllers\API\SellerAuthController@createStore');
 Route::post('seller/login', 'App\Http\Controllers\API\SellerAuthController@login');
 Route::post('seller/{seller}/logout', 'App\Http\Controllers\API\SellerAuthController@logout');
 

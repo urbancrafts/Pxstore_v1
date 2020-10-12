@@ -25,6 +25,12 @@ class CreateUsersTable extends Migration
             $table->string('gender')->nullable();
             $table->string('phone')->nullable();
             $table->boolean('role')->default('4');
+            $table->string('country')->nullable();
+            $table->string('c_code')->nullable();
+            $table->string('curr')->nullable();
+            $table->string('city')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->text('address')->nullable();
             $table->string('app')->default('pxstore');
             $table->text('userImg')->nullable();
             $table->boolean('isActive')->default('0');

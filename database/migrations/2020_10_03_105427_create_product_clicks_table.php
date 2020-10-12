@@ -16,7 +16,10 @@ class CreateProductClicksTable extends Migration
         Schema::create('product_clicks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('prod_id');
+            $table->integer('merch_user_id');
             $table->integer('merch_id');
+            $table->text('url_request');
+            $table->string('ip_address');
             $table->boolean('click')->default('1');
             $table->timestamps();
         });

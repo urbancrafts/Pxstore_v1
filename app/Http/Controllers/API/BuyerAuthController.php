@@ -6,6 +6,7 @@ use session;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use Validator;  
 
@@ -44,6 +45,12 @@ class BuyerAuthController extends BaseController
             'gender' => 'required',
             'phone' => 'required',
             'role' => 'required',
+            'country' => 'required',
+            'c_code' => 'required',
+            'curr' => 'required',
+            'city' => 'required',
+            'zip_code' => 'required',
+            'address' => 'required',
             'password' => 'required',
             'c_password' => 'required|same:password',
         ]);
@@ -57,10 +64,14 @@ class BuyerAuthController extends BaseController
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')->accessToken;
+        $success['user_id'] =  $user->id;
         $success['username'] =  $user->username;
         $success['role'] =  $user->role;
         $success['username'] =  $user->email;
-   
+        
+        Storage::makeDirectory('/userassets/' . $user->id);
+        Storage::makeDirectory('/userassets/' . $user->id . "/profile");
+
         return $this->sendResponse($success, 'User register successfully.');
     }
    
@@ -81,6 +92,7 @@ class BuyerAuthController extends BaseController
 
             if($user->role == 4){
                 $_SESSION['token'] =  $user->createToken('MyApp')-> accessToken;
+                $_SESSION['user_id'] =  $user->id;
                 $_SESSION['username'] =  $user->username;
                 $_SESSION['email'] =  $user->email;
                 $_SESSION['role']  =  $user->role;
@@ -133,6 +145,9 @@ class BuyerAuthController extends BaseController
         $buyer->gender = $input['gender'];
         $buyer->phone = $input['phone'];
         $buyer->role = $role;
+        $buyer->country = $input['country'];
+        $buyer->code = $input['code'];
+        $buyer->curr = $input['curr'];
         $buyer->userImg = $input['userImg'];
         $buyer->isActive = $input['isActive'];
         $buyer->status = $input['status'];

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Validator;
    
 class RegisterController extends BaseController
@@ -46,10 +47,15 @@ class RegisterController extends BaseController
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')->accessToken;
+        $success['user_id'] =  $user->id;
         $success['username'] =  $user->username;
         $success['role'] =  $user->role;
         $success['username'] =  $user->email;
-   
+
+        Storage::makeDirectory('/userassets/' . $user->id);
+        Storage::makeDirectory('/userassets/' . $user->id . "/store");
+        Storage::makeDirectory('/userassets/' . $user->id . "/profile");
+        
         return $this->sendResponse($success, 'User register successfully.');
     }
    
@@ -70,6 +76,7 @@ class RegisterController extends BaseController
             
             if($user->role == 1 || $user->role == 2 || $user->role == 3){
                 $_SESSION['token'] =  $user->createToken('MyApp')-> accessToken;
+                $_SESSION['user_id'] =  $user->id;
                 $_SESSION['username'] =  $user->username;
                 $_SESSION['email'] =  $user->email;
                 $_SESSION['role']  =  $user->role;
@@ -88,6 +95,7 @@ class RegisterController extends BaseController
     public function logout($request)
     {
         session_start();
+        unset($_SESSION['user_id']);
         unset($_SESSION['token']);
         unset($_SESSION['username']);
         unset($_SESSION['email']);
